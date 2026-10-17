@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Porsche Vendas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f3f2ef; --surface:#fcfcfb; --line:#e3e1dc;
+  --ink:#0b0b0b; --ink-2:#52514e; --ink-3:#8a8882;
+  --accent:#b5122b; --accent-soft:#b5122b1f; --track:#ecebe7;
+  --shadow:0 1px 2px #0000000d;
+}
+@media (prefers-color-scheme:dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme:dark;
+    --bg:#111110; --surface:#1a1a19; --line:#2c2c2a;
+    --ink:#f0efec; --ink-2:#c3c2b7; --ink-3:#8f8e86;
+    --accent:#e0384f; --accent-soft:#e0384f29; --track:#262624; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#111110; --surface:#1a1a19; --line:#2c2c2a;
+  --ink:#f0efec; --ink-2:#c3c2b7; --ink-3:#8f8e86;
+  --accent:#e0384f; --accent-soft:#e0384f29; --track:#262624; --shadow:none;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 16px 48px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:14px}
+.eyebrow{font:600 11px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+h1{font:800 clamp(26px,4vw,38px)/1.05 Archivo,sans-serif;letter-spacing:-.02em;margin:8px 0 0}
+.sub{color:var(--ink-2);font-size:13px;margin:0}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin:20px 0 18px}
+.filters label{display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+select{appearance:none;font:500 14px Inter,sans-serif;color:var(--ink);background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%238a8882' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 10px center;border:1px solid var(--line);border-radius:8px;padding:8px 30px 8px 10px;min-width:150px;cursor:pointer}
+select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+button{font:600 13px Inter,sans-serif;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;padding:9px 14px;cursor:pointer}
+button:hover{border-color:var(--ink-3)}
+.count{margin-left:auto;font-size:13px;color:var(--ink-2);align-self:center}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+.kpi{padding:16px 18px}
+.kpi .lbl{font-size:12px;color:var(--ink-2);font-weight:500}
+.kpi .val{font:700 clamp(22px,3vw,30px)/1.1 Archivo,sans-serif;letter-spacing:-.01em;margin-top:6px;font-variant-numeric:tabular-nums}
+.kpi .note{font-size:12px;color:var(--ink-3);margin-top:4px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.q{padding:18px 20px 16px}
+.q.wide{grid-column:1/-1}
+.qn{font:700 11px/1 Inter,sans-serif;letter-spacing:.12em;color:var(--accent);text-transform:uppercase}
+.q h2{font:700 18px/1.25 Archivo,sans-serif;margin:6px 0 4px}
+.ans{font-size:13px;color:var(--ink-2);margin:0 0 14px;min-height:19px}
+.ans b{color:var(--ink)}
+.bars{display:flex;flex-direction:column;gap:6px}
+.row{display:grid;grid-template-columns:var(--lw,110px) 1fr auto;align-items:center;gap:10px;font-size:13px;padding:2px 0;border-radius:6px;cursor:default}
+.row .name{color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track{height:18px;position:relative}
+.bar{height:100%;background:var(--accent);border-radius:0 4px 4px 0;min-width:2px;transition:width .35s ease}
+.row .v{font-variant-numeric:tabular-nums;color:var(--ink-2);text-align:right;min-width:72px}
+.row .v small{color:var(--ink-3)}
+.row:hover{background:var(--accent-soft)}
+.row.dim .bar{opacity:.35}
+.cols{display:grid;grid-template-columns:var(--lw,120px) 1fr 72px 92px;gap:10px;font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.cols span:nth-child(n+3){text-align:right}
+.row.pay{grid-template-columns:var(--lw,120px) 1fr 72px 92px}
+.more{font-size:12px;color:var(--ink-3);margin-top:6px;padding-top:8px;border-top:1px dashed var(--line)}
+.empty{color:var(--ink-3);font-size:13px;padding:14px 0}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--surface);font-size:12px;line-height:1.4;padding:8px 10px;border-radius:8px;opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s;z-index:9;max-width:240px}
+#tip.show{opacity:1;transform:none}
+#tip b{font-weight:600}
+details{margin-top:12px;padding:0}
+summary{padding:14px 20px;cursor:pointer;font-weight:600;font-size:14px}
+.tbl{overflow-x:auto;padding:0 20px 16px}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+td.n,th.n{text-align:right}
+footer{margin-top:22px;font-size:12px;color:var(--ink-3)}
+.theme{padding:7px 11px}
+@media (max-width:820px){.kpis{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.count{margin-left:0;width:100%}select{min-width:0;width:100%}.filters label{flex:1 1 140px}}
+@media (max-width:520px){.row.pay,.cols{grid-template-columns:90px 1fr 64px}.row.pay .tk,.cols .tk{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">Painel de vendas · 100 registros</div>
+      <h1>Porsche — onde está a receita</h1>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <p class="sub">Valores em US$. Passe o mouse nas barras para detalhes.</p>
+      <button class="theme" id="theme" aria-label="Alternar tema claro/escuro">Tema</button>
+    </div>
+  </header>
+
+  <div class="filters" role="group" aria-label="Filtros">
+    <label>Linha de modelo<select id="f-linha"></select></label>
+    <label>Estado<select id="f-estado"></select></label>
+    <label>Ano do modelo<select id="f-ano"></select></label>
+    <label>Pagamento<select id="f-pagamento"></select></label>
+    <label>Status<select id="f-status"></select></label>
+    <button id="reset">Limpar filtros</button>
+    <span class="count" id="count" aria-live="polite"></span>
+  </div>
+
+  <section class="kpis" aria-label="Indicadores">
+    <div class="card kpi"><div class="lbl">Vendas</div><div class="val" id="k-vendas">–</div><div class="note" id="k-vendas-n"></div></div>
+    <div class="card kpi"><div class="lbl">Receita</div><div class="val" id="k-receita">–</div><div class="note" id="k-receita-n"></div></div>
+    <div class="card kpi"><div class="lbl">Ticket médio</div><div class="val" id="k-ticket">–</div><div class="note" id="k-ticket-n"></div></div>
+    <div class="card kpi"><div class="lbl">Entregues</div><div class="val" id="k-entr">–</div><div class="note" id="k-entr-n"></div></div>
+  </section>
+
+  <section class="grid">
+    <article class="card q">
+      <div class="qn">Pergunta 1</div>
+      <h2>Qual linha de modelo traz mais receita?</h2>
+      <p class="ans" id="a1"></p>
+      <div class="bars" id="c1" style="--lw:84px"></div>
+    </article>
+    <article class="card q">
+      <div class="qn">Pergunta 2</div>
+      <h2>Em quais estados a receita se concentra?</h2>
+      <p class="ans" id="a2"></p>
+      <div class="bars" id="c2" style="--lw:44px"></div>
+    </article>
+    <article class="card q wide">
+      <div class="qn">Pergunta 3</div>
+      <h2>Como os clientes pagam — e qual método traz o maior ticket?</h2>
+      <p class="ans" id="a3"></p>
+      <div class="cols" style="--lw:130px"><span>Método</span><span>Receita</span><span>Vendas</span><span class="tk">Ticket médio</span></div>
+      <div class="bars" id="c3" style="--lw:130px"></div>
+    </article>
+  </section>
+
+  <details class="card">
+    <summary>Ver vendas filtradas em tabela</summary>
+    <div class="tbl"><table><thead><tr><th>ID</th><th>Modelo</th><th class="n">Ano</th><th class="n">Preço</th><th>Pagamento</th><th>Cidade</th><th>UF</th><th>Status</th></tr></thead><tbody id="tb"></tbody></table></div>
+  </details>
+
+  <footer>Base: 100 vendas fictícias usadas no desafio da DIO, só com colunas sanitizadas e sem nomes de clientes ou vendedores. “Em andamento” agrupa pendente, em trânsito, enviado e aguardando.</footer>
+</div>
+<div id="tip" role="tooltip"></div>
+
+<script>
+const RAW=[[6,"718 Cayman","718",2022,79500.0,"Credit Card","Boston","MA","Entregue","Delivered"],[7,"911 Turbo S","911",2024,235000.0,"Wire Transfer","Seattle","WA","Entregue","Delivered"],[8,"Cayenne Coupe","Cayenne",2023,112750.0,"Financing","Austin","TX","Em andamento","In Transit"],[9,"Macan S","Macan",2021,68900.0,"Cash","Denver","CO","Em andamento","Pending"],[10,"Taycan 4S","Taycan",2024,121000.0,"Bank Transfer","Los Angeles","CA","Entregue","Delivered"],[11,"Panamera 4","Panamera",2023,104500.0,"Credit Card","Miami","FL","Cancelada","Cancelled"],[12,"911 Carrera S","911",2020,96300.0,"Lease","New York","NY","Entregue","Delivered"],[13,"Cayenne E-Hybrid","Cayenne",2022,89750.0,"Wire Transfer","San Diego","CA","Em andamento","Pending Approval"],[14,"718 Boxster","718",2021,73500.0,"Debit Card","Chicago","IL","Em andamento","Shipped"],[15,"Macan GTS","Macan",2024,95000.0,"Financing","Phoenix","AZ","Em andamento","In Transit"],[16,"Taycan Turbo","Taycan",2023,153200.5,"ACH Payment","Dallas","TX","Entregue","Delivered"],[17,"911 GT3","911",2024,241000.0,"Wire Transfer","Las Vegas","NV","Em andamento","Pending"],[18,"Panamera Turbo S","Panamera",2022,132000.0,"Cash","San Jose","CA","Entregue","Delivered"],[19,"Cayenne Turbo GT","Cayenne",2024,188000.0,"Crypto Payment","Houston","TX","Em andamento","Awaiting Delivery"],[20,"911 Carrera Cabriolet","911",2023,127800.0,"Credit Card","Atlanta","GA","Entregue","Delivered"],[21,"Macan","Macan",2021,58900.0,"Bank Transfer","Orlando","FL","Em andamento","Pending"],[22,"718 Spyder RS","718",2024,164000.0,"Financing","Portland","OR","Em andamento","In Transit"],[23,"Taycan Cross Turismo","Taycan",2023,118500.0,"Wire Transfer","Charlotte","NC","Entregue","Delivered"],[24,"Cayenne S","Cayenne",2022,91300.0,"Credit Card","Nashville","TN","Em andamento","Pending"],[25,"911 Targa 4S","911",2024,158750.0,"Lease","Minneapolis","MN","Entregue","Delivered"],[26,"Panamera","Panamera",2020,72000.0,"Bank Transfer","Philadelphia","PA","Cancelada","Cancelled"],[27,"Macan Electric","Macan",2025,86500.0,"Wire Transfer","San Antonio","TX","Entregue","Delivered"],[28,"911 Dakar","911",2024,270000.0,"Cash","Salt Lake City","UT","Em andamento","Awaiting Pickup"],[29,"Taycan GTS","Taycan",2023,139000.0,"Financing","Raleigh","NC","Em andamento","In Transit"],[30,"Cayenne","Cayenne",2021,76800.0,"Credit Card","Detroit","MI","Entregue","Delivered"],[31,"718 Cayman GT4 RS","718",2024,173600.0,"Wire Transfer","Columbus","OH","Em andamento","Pending"],[32,"911 Carrera GTS","911",2022,119900.0,"Cash","Indianapolis","IN","Entregue","Delivered"],[33,"Panamera 4 E-Hybrid","Panamera",2023,109250.0,"Lease","Fort Worth","TX","Em andamento","In Transit"],[34,"Macan T","Macan",2022,82000.0,"Wire Transfer","Jacksonville","FL","Entregue","Delivered"],[35,"Taycan Turbo S","Taycan",2025,214000.0,"Crypto Payment","San Diego","CA","Em andamento","Pending Review"],[36,"911 Carrera","911",2024,124500.0,"Credit Card","Tampa","FL","Entregue","Delivered"],[37,"Cayenne S","Cayenne",2023,98200.0,"Bank Transfer","Sacramento","CA","Em andamento","Pending"],[38,"Macan","Macan",2022,67500.0,"Financing","Cleveland","OH","Entregue","Delivered"],[39,"Taycan","Taycan",2025,116900.0,"Wire Transfer","Milwaukee","WI","Em andamento","In Transit"],[40,"Panamera 4S","Panamera",2024,112000.0,"Cash","Kansas City","MO","Entregue","Delivered"],[41,"718 Boxster","718",2021,74000.0,"Debit Card","Omaha","NE","Cancelada","Cancelled"],[42,"911 Turbo","911",2024,198300.0,"Wire Transfer","Albuquerque","NM","Em andamento","Awaiting Delivery"],[43,"Cayenne Coupe","Cayenne",2023,103750.0,"Wire Transfer","Tucson","AZ","Em andamento","Pending Approval"],[44,"Macan GTS","Macan",2024,93600.0,"Financing","Fresno","CA","Em andamento","Shipped"],[45,"Taycan 4S","Taycan",2025,129000.0,"ACH Payment","Virginia Beach","VA","Em andamento","In Transit"],[46,"Panamera Turbo","Panamera",2022,136000.0,"Credit Card","Colorado Springs","CO","Entregue","Delivered"],[47,"911 GT3 RS","911",2024,286500.0,"Wire Transfer","Arlington","TX","Em andamento","Pending"],[48,"Cayenne E-Hybrid","Cayenne",2023,92800.0,"Lease","Bakersfield","CA","Entregue","Delivered"],[49,"Macan T","Macan",2022,72400.0,"Cash","Mesa","AZ","Em andamento","Awaiting Pickup"],[50,"Taycan Turbo","Taycan",2025,158500.0,"Crypto Payment","Atlanta","GA","Entregue","Delivered"],[51,"718 Cayman","718",2021,69900.0,"Bank Transfer","Long Beach","CA","Em andamento","Pending"],[52,"911 Targa 4","911",2024,141250.0,"Financing","Oakland","CA","Em andamento","In Transit"],[53,"Panamera","Panamera",2020,71500.0,"Wire Transfer","Tulsa","OK","Entregue","Delivered"],[54,"Cayenne Turbo","Cayenne",2023,146800.0,"Credit Card","Wichita","KS","Em andamento","Pending"],[55,"Macan Electric","Macan",2025,89700.0,"Lease","New Orleans","LA","Entregue","Delivered"],[56,"911 Carrera S","911",2022,104600.0,"Bank Transfer","Honolulu","HI","Cancelada","Cancelled"],[57,"Taycan GTS","Taycan",2024,142000.0,"Wire Transfer","Anaheim","CA","Entregue","Delivered"],[58,"Cayenne","Cayenne",2021,78400.0,"Cash","Henderson","NV","Em andamento","Awaiting Review"],[59,"718 Spyder RS","718",2025,169000.0,"Financing","Lexington","KY","Em andamento","In Transit"],[60,"911 Dakar","911",2024,268900.0,"Credit Card","Riverside","CA","Entregue","Delivered"],[61,"Panamera 4","Panamera",2023,101300.0,"Wire Transfer","Corpus Christi","TX","Em andamento","Pending"],[62,"Macan S","Macan",2021,66750.0,"Cash","St. Louis","MO","Entregue","Delivered"],[63,"Taycan Cross Turismo","Taycan",2024,127900.0,"Lease","Pittsburgh","PA","Em andamento","In Transit"],[64,"Cayenne Turbo GT","Cayenne",2025,200000.0,"Wire Transfer","Cincinnati","OH","Entregue","Delivered"],[65,"911 Carrera Cabriolet","911",2023,132000.0,"Crypto Payment","Anchorage","AK","Em andamento","Pending Review"],[66,"718 Cayman GT4 RS","718",2024,176400.0,"Credit Card","Plano","TX","Entregue","Delivered"],[67,"Panamera 4 E-Hybrid","Panamera",2022,108500.0,"Bank Transfer","Newark","NJ","Cancelada","Cancelled"],[68,"Macan","Macan",2021,59000.0,"Financing","Greensboro","NC","Em andamento","Awaiting Delivery"],[69,"Taycan Turbo S","Taycan",2025,218000.0,"Wire Transfer","Lincoln","NE","Em andamento","Pending"],[70,"Cayenne S","Cayenne",2024,99950.0,"Debit Card","Jersey City","NJ","Entregue","Delivered"],[71,"911 Carrera GTS","911",2024,121750.0,"Credit Card","Chandler","AZ","Entregue","Delivered"],[72,"718 Boxster GTS","718",2023,91500.0,"Lease","Reno","NV","Em andamento","Shipped"],[73,"Panamera Turbo S","Panamera",2022,134000.0,"Wire Transfer","Buffalo","NY","Em andamento","In Transit"],[74,"Macan GTS","Macan",2024,96800.0,"ACH Payment","Durham","NC","Entregue","Delivered"],[75,"Taycan 4S","Taycan",2025,131600.0,"Wire Transfer","Laredo","TX","Em andamento","Pending Approval"],[76,"Cayenne E-Hybrid","Cayenne",2023,94300.0,"Cash","Madison","WI","Entregue","Delivered"],[77,"911 Turbo S","911",2025,242000.0,"Crypto Payment","Lubbock","TX","Em andamento","Awaiting Pickup"],[78,"718 Cayman S","718",2022,82750.0,"Credit Card","Toledo","OH","Cancelada","Cancelled"],[79,"Macan Electric","Macan",2026,91300.0,"Wire Transfer","Irvine","CA","Entregue","Delivered"],[80,"Panamera","Panamera",2021,79900.0,"Financing","Garland","TX","Em andamento","Pending"],[81,"Cayenne Coupe","Cayenne",2024,111000.0,"Bank Transfer","Irving","TX","Em andamento","In Transit"],[82,"911 Targa 4S","911",2023,156500.0,"Cash","Chesapeake","VA","Entregue","Delivered"],[83,"Taycan","Taycan",2025,119900.0,"Lease","Scottsdale","AZ","Em andamento","Pending"],[84,"Macan T","Macan",2022,73200.0,"Wire Transfer","Norfolk","VA","Entregue","Delivered"],[85,"911 GT3","911",2024,224000.0,"Wire Transfer","Boise","ID","Em andamento","Awaiting Delivery"],[86,"911 Carrera","911",2024,126900.0,"Credit Card","Orlando","FL","Entregue","Delivered"],[87,"Cayenne","Cayenne",2023,84500.0,"Bank Transfer","San Jose","CA","Em andamento","Pending"],[88,"Macan S","Macan",2022,69800.0,"Financing","Tampa","FL","Entregue","Delivered"],[89,"Taycan 4S","Taycan",2025,132700.0,"Wire Transfer","Denver","CO","Em andamento","In Transit"],[90,"Panamera","Panamera",2021,81000.0,"Cash","Austin","TX","Entregue","Delivered"],[91,"718 Cayman","718",2023,78900.0,"Debit Card","Seattle","WA","Cancelada","Cancelled"],[92,"911 Turbo S","911",2026,249300.0,"Wire Transfer","Boston","MA","Em andamento","Awaiting Delivery"],[93,"Cayenne Coupe","Cayenne",2024,108750.0,"Wire Transfer","Phoenix","AZ","Em andamento","Pending Approval"],[94,"Macan Electric","Macan",2026,92600.0,"Financing","Chicago","IL","Em andamento","Shipped"],[95,"Taycan Turbo","Taycan",2025,164000.0,"ACH Payment","Dallas","TX","Em andamento","In Transit"],[96,"Panamera 4S","Panamera",2024,119000.0,"Credit Card","San Francisco","CA","Entregue","Delivered"],[97,"911 GT3","911",2026,232500.0,"Wire Transfer","Las Vegas","NV","Em andamento","Pending"],[98,"Cayenne E-Hybrid","Cayenne",2023,96800.0,"Lease","Charlotte","NC","Entregue","Delivered"],[99,"Macan T","Macan",2022,74400.0,"Cash","Mesa","AZ","Em andamento","Awaiting Pickup"],[100,"Taycan GTS","Taycan",2025,148500.0,"Crypto Payment","Atlanta","GA","Entregue","Delivered"],[101,"718 Boxster","718",2021,71900.0,"Bank Transfer","Long Beach","CA","Em andamento","Pending"],[102,"911 Targa 4","911",2024,143250.0,"Financing","Oakland","CA","Em andamento","In Transit"],[103,"Panamera Turbo","Panamera",2020,137500.0,"Wire Transfer","Tulsa","OK","Entregue","Delivered"],[104,"Cayenne Turbo GT","Cayenne",2025,204800.0,"Credit Card","Wichita","KS","Em andamento","Pending"],[105,"911 Dakar","911",2024,271700.0,"Lease","New Orleans","LA","Entregue","Delivered"]];
+const D=RAW.map(r=>({id:r[0],modelo:r[1],linha:r[2],ano:r[3],preco:r[4],pagamento:r[5],cidade:r[6],estado:r[7],status:r[8],status_orig:r[9]}));
+const usd0=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+const compact=v=>v>=1e6?'$'+(v/1e6).toFixed(2).replace(/\.?0+$/,'')+' mi':v>=1e3?'$'+Math.round(v/1e3)+' mil':usd0.format(v);
+const pct=v=>(v*100).toFixed(0)+'%';
+const F={linha:'Todas',estado:'Todos',ano:'Todos',pagamento:'Todos',status:'Todos'};
+const ALL={linha:'Todas',estado:'Todos',ano:'Todos',pagamento:'Todos',status:'Todos'};
+const uniq=k=>[...new Set(D.map(d=>d[k]))].sort((a,b)=>typeof a==='number'?a-b:String(a).localeCompare(String(b)));
+for(const k of Object.keys(F)){
+  const s=document.getElementById('f-'+k);
+  s.innerHTML=[ALL[k],...uniq(k)].map(v=>`<option>${v}</option>`).join('');
+  s.addEventListener('change',()=>{F[k]=s.value;render()});
+}
+document.getElementById('reset').onclick=()=>{for(const k in F){F[k]=ALL[k];document.getElementById('f-'+k).value=ALL[k]}render()};
+const pass=d=>Object.keys(F).every(k=>F[k]===ALL[k]||String(d[k])===F[k]);
+function group(rows,key){
+  const m=new Map();
+  for(const r of rows){const g=m.get(r[key])||{k:r[key],sum:0,n:0};g.sum+=r.preco;g.n++;m.set(r[key],g)}
+  return [...m.values()].sort((a,b)=>b.sum-a.sum);
+}
+const tip=document.getElementById('tip');
+function bindTip(el,html){
+  el.addEventListener('mousemove',e=>{tip.innerHTML=html;tip.classList.add('show');
+    const x=Math.min(e.clientX+14,innerWidth-tip.offsetWidth-8),y=Math.min(e.clientY+14,innerHeight-tip.offsetHeight-8);
+    tip.style.left=x+'px';tip.style.top=y+'px'});
+  el.addEventListener('mouseleave',()=>tip.classList.remove('show'));
+}
+function bars(id,data,total,{pay=false,limit=0,label=d=>d.k}={}){
+  const box=document.getElementById(id);box.innerHTML='';
+  if(!data.length){box.innerHTML='<div class="empty">Nenhuma venda com esses filtros.</div>';return}
+  let list=data;
+  let note='';
+  if(limit&&data.length>limit){const rest=data.slice(limit),rs=rest.reduce((a,b)=>a+b.sum,0);list=data.slice(0,limit);note=`<div class="more">+ ${rest.length} outros estados: ${compact(rs)} (${pct(rs/total)} da receita)</div>`}
+  const max=Math.max(...list.map(d=>d.sum));
+  for(const d of list){
+    const r=document.createElement('div');r.className='row'+(pay?' pay':'')+(d.other?' dim':'');
+    r.innerHTML=`<span class="name" title="${label(d)}">${label(d)}</span><div class="track"><div class="bar" style="width:${(d.sum/max*100).toFixed(1)}%"></div></div>`+
+      (pay?`<span class="v">${d.n}</span><span class="v tk">${compact(d.sum/d.n)}</span>`:`<span class="v">${compact(d.sum)} <small>${pct(d.sum/total)}</small></span>`);
+    bindTip(r,`<b>${label(d)}</b><br>Receita: ${usd0.format(d.sum)} (${pct(d.sum/total)})<br>Vendas: ${d.n}<br>Ticket médio: ${usd0.format(d.sum/d.n)}`);
+    box.appendChild(r);
+  }
+  if(note)box.insertAdjacentHTML('beforeend',note);
+}
+function render(){
+  for(const k in F)document.getElementById('f-'+k).classList.toggle('on',F[k]!==ALL[k]);
+  const rows=D.filter(pass);
+  const total=rows.reduce((a,b)=>a+b.preco,0), n=rows.length;
+  const entr=rows.filter(r=>r.status==='Entregue').length, canc=rows.filter(r=>r.status==='Cancelada').length;
+  document.getElementById('count').textContent=n===D.length?'Mostrando todas as 100 vendas':`Mostrando ${n} de ${D.length} vendas`;
+  document.getElementById('k-vendas').textContent=n;
+  document.getElementById('k-vendas-n').textContent=canc?`${canc} cancelada${canc>1?'s':''}`:'nenhuma cancelada';
+  document.getElementById('k-receita').textContent=n?compact(total):'–';
+  document.getElementById('k-receita-n').textContent=n?usd0.format(total):'';
+  document.getElementById('k-ticket').textContent=n?compact(total/n):'–';
+  const pr=rows.map(r=>r.preco);
+  document.getElementById('k-ticket-n').textContent=n?`de ${compact(Math.min(...pr))} a ${compact(Math.max(...pr))}`:'';
+  document.getElementById('k-entr').textContent=n?pct(entr/n):'–';
+  document.getElementById('k-entr-n').textContent=n?`${entr} de ${n} vendas`:'';
+
+  const g1=group(rows,'linha'),g2=group(rows,'estado'),g3=group(rows,'pagamento');
+  bars('c1',g1,total);
+  bars('c2',g2,total,{limit:8});
+  bars('c3',g3,total,{pay:true});
+  const a=(id,h)=>document.getElementById(id).innerHTML=n?h:'';
+  if(!n)['a1','a2','a3'].forEach(i=>document.getElementById(i).innerHTML='');
+  if(n){
+    a('a1',g1.length>1?`<b>${g1[0].k}</b> lidera com ${pct(g1[0].sum/total)} da receita · depois vem ${g1[1].k} (${pct(g1[1].sum/total)}).`:`Só a linha <b>${g1[0].k}</b> está no filtro.`);
+    const top2=g2.slice(0,2).reduce((s,d)=>s+d.sum,0);
+    a('a2',g2.length>1?`<b>${g2[0].k}</b> e <b>${g2[1].k}</b> somam ${pct(top2/total)} da receita, em ${g2.length} estados com venda.`:`Toda a receita vem de <b>${g2[0].k}</b>.`);
+    const bt=[...g3].sort((x,y)=>y.sum/y.n-x.sum/x.n)[0];
+    a('a3',g3.length===1?`Todas as vendas do filtro usam <b>${g3[0].k}</b>.`:`<b>${g3[0].k}</b> é o método com mais receita (${pct(g3[0].sum/total)})${bt.k!==g3[0].k?` · o maior ticket médio é de <b>${bt.k}</b> (${usd0.format(bt.sum/bt.n)}, ${bt.n} venda${bt.n>1?'s':''})`:', e também o de maior ticket médio'}.`);
+  }
+  document.getElementById('tb').innerHTML=rows.slice().sort((x,y)=>y.preco-x.preco).map(r=>`<tr><td>${r.id}</td><td>${r.modelo}</td><td class="n">${r.ano}</td><td class="n">${usd0.format(r.preco)}</td><td>${r.pagamento}</td><td>${r.cidade}</td><td>${r.estado}</td><td>${r.status_orig}</td></tr>`).join('');
+}
+const root=document.documentElement;
+document.getElementById('theme').onclick=()=>{
+  const dark=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  root.dataset.theme=dark?'light':'dark';
+};
+render();
+</script>
+</body>
+</html>
